@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html ng-app="tinyReddit">
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="script.js"></script>
+
+    <meta name="google-signin-client_id" content="397375665310-d6l9etnmmhc26pt0jfojpas6q09cj1ne.apps.googleusercontent.com">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  </head>
+  <body ng-controller="Controller">
+
+  <header class="fixed-top">
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQK0qqHMbF8AJnW84Pc5ZtqTV861-S_Hi87fJtz02Aj66ZzXINyyw">
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Contact</h4>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-white">Follow us on GitHub</a></li>
+                <li><p></p></li>
+                <li><p class="text-white">Copyright Alexandre Goux & Martin Levrard</p></li>
+              </ul>
+              <div>
+                <button id="signout" ng-click="signOut()" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">Sign out</button>
+                <script>
+                  function signOut() {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    auth2.signOut().then(function () {
+                      console.log('User signed out.');
+                    });
+                  }
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+          <div class="g-signin2" data-onsuccess="onSignIn" data-onfailure="onSignInFailure"></div>
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <strong>Tiny Reddit</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Create a post</h1>
+          <form ng-submit="addMessage()" class="needs-validation" novalidate>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <input type="text" ng-model="title" class="form-control" id="title" placeholder="Title" value="" required>
+                  <div class="invalid-feedback">
+                    Valid title is required.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <input type="text" ng-model="imgUrl" class="form-control" id="imgUrl" placeholder="Image URL" value="" required>
+                  <div class="invalid-feedback">
+                    Valid last name is required.
+                  </div>
+                </div>
+              </div>
+            <textarea class="form-control" ng-model="body" rows="" placeholder="Your text..."></textarea>
+            <br>
+            <div class="row justify-content-md-center">
+              <div class="col-md-3">
+                <input class="btn btn-lg btn-block btn-outline-primary" type="submit" value="POST">
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <h2 class="text-center jumbotron-heading">Hot posts</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 offset-md-3" ng-repeat="x in messages">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
+                <div class="card-body">
+                  <h4 class="card-text">{{x.properties.title}}</h4>
+                  <p class="card-text">{{x.properties.body}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
+                      <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+                    </div>
+                    <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var init = function() {
+        console.log("init called");
+        window.init();
+      };
+    </script>
+
+    <script src="https://apis.google.com/js/client.js?onload=init"></script>
+
+  </body>
+
+</html>
