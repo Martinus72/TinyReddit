@@ -1,6 +1,9 @@
 # TinyReddit
-**by Alexandre Goux & Martin Levrard**
 Dans le cadre de notre module "Développement d'applications sur le CLOUD (X2IP070)" nous devions réaliser une Google App Engine similaire à ce que l'on peut retrouver sur le site Reddit.
+
+## Authors
+* **Alexandre Goux** - *Developer* - [alexandre-goux](https://github.com/alexandre-goux)
+* **Martin Levrard** - *Developer* - [MartinL](https://github.com/Martinus72)
 
 ## Features
 Voici la liste des fonctionnalités de notre application :
