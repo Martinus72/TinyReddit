@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script src="script.js"></script>
 
-    <meta name="google-signin-client_id" content="397375665310-d6l9etnmmhc26pt0jfojpas6q09cj1ne.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="397375665310-4284tn7rnhrjug221hmvmphecikokj6c.apps.googleusercontent.com">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -64,58 +64,171 @@
     </header>
 
     <main role="main">
-      <section class="jumbotron text-center">
-        <div class="container">
-          <h1 class="jumbotron-heading">Create a post</h1>
-          <form ng-submit="addMessage()" class="needs-validation" novalidate>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <input type="text" ng-model="title" class="form-control" id="title" placeholder="Title" value="" required>
-                  <div class="invalid-feedback">
-                    Valid title is required.
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <input type="text" ng-model="imgUrl" class="form-control" id="imgUrl" placeholder="Image URL" value="" required>
-                  <div class="invalid-feedback">
-                    Valid last name is required.
-                  </div>
-                </div>
-              </div>
-            <textarea class="form-control" ng-model="body" rows="" placeholder="Your text..."></textarea>
-            <br>
-            <div class="row justify-content-md-center">
-              <div class="col-md-3">
-                <input class="btn btn-lg btn-block btn-outline-primary" type="submit" value="POST">
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
+      <br><br><br>
 
-      <div class="album py-5 bg-light">
-        <h2 class="text-center jumbotron-heading">Hot posts</h2>
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6 offset-md-3" ng-repeat="x in messages">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
-                <div class="card-body">
-                  <h4 class="card-text">{{x.properties.title}}</h4>
-                  <p class="card-text">{{x.properties.body}}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
-                      <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+      <div class="container">
+        <ul class="nav nav-pills justify-content-end">
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab1">Home</a></li>
+          <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab">Hot</a></li>
+          <li class="nav-item"><a href="#tab3" class="nav-link" data-toggle="tab">My Account</a></li>
+        </ul>
+      </div>
+
+      <div class="tab-content">
+
+        <!-- Begin home page -->
+        <div class="container tab-pane active" id="tab1">
+          <h1 class="text-center jumbotron-heading">Create a post</h1>
+          <form ng-submit="addMessage()">
+              <div class="controls">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="form_name">Title *</label>
+                              <input id="title" type="text" ng-model="title" class="form-control" placeholder="Please enter your title" required="required" data-error="Title is required.">
+                              <div class="help-block with-errors"></div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="form_lastname">Image URL</label>
+                              <input id="imgUrl" type="text" ng-model="imgUrl" class="form-control" placeholder="Please enter your image URL">
+                              <div class="help-block with-errors"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label for="form_message">Message *</label>
+                              <textarea class="form-control" ng-model="body" placeholder="Please enter your message" rows="4" required="required" data-error="Please,leave us a message."></textarea>
+                              <div class="help-block with-errors"></div>
+                          </div>
+                      </div>
+                      <div class="col-md-12">
+                          <input type="submit" class="btn btn-success btn-send" type="submit" value="Post message">
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <p class="text-muted"><strong>*</strong> These fields are required.</p>
+                      </div>
+                  </div>
+              </div>
+          </form>
+
+          <div class="album py-5 bg-light">
+            <h1 class="text-center jumbotron-heading">Last posts</h1>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 offset-md-3" ng-repeat="x in lastMessages">
+                  <div class="card mb-4 box-shadow">
+                    <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
+                    <div class="card-body">
+                      <h4 class="card-text">{{x.properties.title}}</h4>
+                      <p class="card-text">{{x.properties.body}}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
+                          <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+                        </div>
+                        <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
+                      </div>
                     </div>
-                    <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- End home page -->
+
+        <!-- Begin hot page -->
+        <div class="container tab-pane" id="tab2">
+          <div class="album py-5 bg-light">
+            <h1 class="text-center jumbotron-heading">Hot posts</h1>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 offset-md-3" ng-repeat="x in messages">
+                  <div class="card mb-4 box-shadow">
+                    <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
+                    <div class="card-body">
+                      <h4 class="card-text">{{x.properties.title}}</h4>
+                      <p class="card-text">{{x.properties.body}}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
+                          <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+                        </div>
+                        <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End hot page -->
+
+        <!-- Begin account page -->
+        <div class="tab-pane" id="tab3">
+          <div class="container">
+            <div class="album py-5 bg-light">
+              <h1 class="text-center jumbotron-heading">My posts</h1>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6 offset-md-3" ng-repeat="x in myMessages">
+                    <div class="card mb-4 box-shadow">
+                      <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
+                      <div class="card-body">
+                        <h4 class="card-text">{{x.properties.title}}</h4>
+                        <p class="card-text">{{x.properties.body}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
+                            <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+                          </div>
+                          <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="album py-5 bg-light">
+              <h1 class="text-center jumbotron-heading">My vote posts</h1>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6 offset-md-3" ng-repeat="x in myVotes">
+                    <div class="card mb-4 box-shadow">
+                      <img class="card-img-top" src="{{x.properties.imgUrl}}" alt="">
+                      <div class="card-body">
+                        <h4 class="card-text">{{x.properties.title}}</h4>
+                        <p class="card-text">{{x.properties.body}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h4><span class="badge badge-primary">{{x.properties.hot}}</span></h4>
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-danger" ng-click="vote(x.key.name, 0)">-</button>
+                            <button type="button" class="btn btn-sm btn-outline-success" ng-click="vote(x.key.name, 1)">+</button>
+                          </div>
+                          <small class="text-muted">Post by {{x.properties.fullName}}, {{x.properties.pubDate}}.</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End account page -->
+
       </div>
     </main>
 

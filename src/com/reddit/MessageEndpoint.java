@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +130,73 @@ public class MessageEndpoint {
 		
 		return results;
 	}
+	
+	/**
+	 * This method gets the last entities list. It uses HTTP GET method.
+	 * list contains 10 entities
+	 * 
+	 * @return The entities list with primary key id.
+	 */
+	@ApiMethod(name="getLastMessages", path="getLastMessages")
+	public List<Entity> getLastMessages() {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query("Message").addSort("pubDate", SortDirection.DESCENDING);
+		
+		PreparedQuery pq= ds.prepare(q);
+		
+		List<Entity> results=pq.asList(FetchOptions.Builder.withLimit(10));
+		
+		return results;
+	}
+	
+	/**
+	 * This method gets the last entities list. It uses HTTP GET method.
+	 * list contains 10 entities
+	 * 
+	 * @return The entities list with primary key id.
+	 */
+	@ApiMethod(name="getMyVotesMessages", path="getMyVotesMessages")
+	public Collection<Entity> getMyVotesMessages(@Named("userID") String userID) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		
+		Filter p = new FilterPredicate("voters", FilterOperator.EQUAL, userID);
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query ("MessageIndex").setFilter(p);
+		q.setKeysOnly();
+
+		PreparedQuery pq = ds.prepare(q);
+
+		List<Entity> results = pq.asList(FetchOptions.Builder.withLimit(100));
+		List<Key> pk = new ArrayList<Key>();
+		for (Entity r : results) {
+			pk.add(r.getParent());
+		}
+		
+		Map<Key, Entity> map = ds.get(pk);
+		return map.values();	
+	}
+	
+	/**
+	 * This method gets the user's messages entities list. It uses HTTP GET method.
+	 * list contains 10 entities
+	 *
+	 * @return The user's messages entities list with primary key id.
+	 */
+	@ApiMethod(name = "getMyMessages")
+	public List<Entity> getMyMessages(@Named("userID") String userID) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		
+		Filter f = new FilterPredicate("owner", FilterOperator.EQUAL, userID);
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query("Message").setFilter(f);
+		
+		PreparedQuery pq= ds.prepare(q);
+		
+		List<Entity> results=pq.asList(FetchOptions.Builder.withLimit(10));
+		
+		return results;
+	}
+
 
 	/**
 	 * This inserts a new entity into App Engine datastore.
@@ -165,7 +233,6 @@ public class MessageEndpoint {
         
         ds.put(messageIndex);        
         return message;
-
 	}
 	
 	

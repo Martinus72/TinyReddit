@@ -28,6 +28,22 @@
   "ownerName" : "mycompany.com",
   "packagePath" : "services",
   "methods" : {
+    "messageendpoint.updateMessage" : {
+      "path" : "message",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.reddit.MessageEndpoint.updateMessage",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "messageendpoint.getMessage" : {
       "path" : "message/{id}",
       "httpMethod" : "GET",
@@ -49,30 +65,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "messageendpoint.updateMessage" : {
-      "path" : "message",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.reddit.MessageEndpoint.updateMessage",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "messageendpoint.getAllMessages" : {
-      "path" : "entitycollection",
+    "messageendpoint.getLastMessages" : {
+      "path" : "getLastMessages",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.reddit.MessageEndpoint.getAllMessages",
+      "rosyMethod" : "com.reddit.MessageEndpoint.getLastMessages",
       "request" : {
         "body" : "empty"
       },
@@ -80,44 +80,40 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "messageendpoint.removeMessage" : {
-      "path" : "message/{id}",
-      "httpMethod" : "DELETE",
+    "messageendpoint.getMyVotesMessages" : {
+      "path" : "getMyVotesMessages",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.reddit.MessageEndpoint.removeMessage",
+      "rosyMethod" : "com.reddit.MessageEndpoint.getMyVotesMessages",
       "request" : {
         "parameters" : {
-          "id" : {
-            "type" : "int64",
+          "userID" : {
+            "type" : "string",
             "required" : true
           }
         },
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
-    "messageendpoint.listMessage" : {
-      "path" : "message",
+    "messageendpoint.getMyMessages" : {
+      "path" : "entitycollection/{userID}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.reddit.MessageEndpoint.listMessage",
+      "rosyMethod" : "com.reddit.MessageEndpoint.getMyMessages",
       "request" : {
         "parameters" : {
-          "cursor" : {
+          "userID" : {
             "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
+            "required" : true
           }
         },
         "body" : "empty"
@@ -191,6 +187,67 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "messageendpoint.removeMessage" : {
+      "path" : "message/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.reddit.MessageEndpoint.removeMessage",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "messageendpoint.getAllMessages" : {
+      "path" : "entitycollection",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.reddit.MessageEndpoint.getAllMessages",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "messageendpoint.listMessage" : {
+      "path" : "message",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.reddit.MessageEndpoint.listMessage",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
@@ -227,20 +284,20 @@
           "key" : {
             "$ref" : "Key"
           },
-          "kind" : {
+          "namespace" : {
             "type" : "string"
           },
-          "namespace" : {
+          "kind" : {
             "type" : "string"
           },
           "parent" : {
             "$ref" : "Key"
           },
-          "propertiesFrom" : {
-            "$ref" : "Entity"
-          },
           "appId" : {
             "type" : "string"
+          },
+          "propertiesFrom" : {
+            "$ref" : "Entity"
           },
           "properties" : {
             "$ref" : "JsonMap"
@@ -308,11 +365,6 @@
       }
     },
     "methods" : {
-      "com.reddit.MessageEndpoint.getMessage" : {
-        "response" : {
-          "$ref" : "Message"
-        }
-      },
       "com.reddit.MessageEndpoint.updateMessage" : {
         "request" : {
           "$ref" : "Message"
@@ -321,16 +373,24 @@
           "$ref" : "Message"
         }
       },
-      "com.reddit.MessageEndpoint.getAllMessages" : {
+      "com.reddit.MessageEndpoint.getMessage" : {
+        "response" : {
+          "$ref" : "Message"
+        }
+      },
+      "com.reddit.MessageEndpoint.getLastMessages" : {
         "response" : {
           "$ref" : "EntityCollection"
         }
       },
-      "com.reddit.MessageEndpoint.removeMessage" : {
-      },
-      "com.reddit.MessageEndpoint.listMessage" : {
+      "com.reddit.MessageEndpoint.getMyVotesMessages" : {
         "response" : {
-          "$ref" : "CollectionResponse_Message"
+          "$ref" : "EntityCollection"
+        }
+      },
+      "com.reddit.MessageEndpoint.getMyMessages" : {
+        "response" : {
+          "$ref" : "EntityCollection"
         }
       },
       "com.reddit.MessageEndpoint.insertMessage" : {
@@ -341,6 +401,18 @@
       "com.reddit.MessageEndpoint.likeMessage" : {
         "response" : {
           "$ref" : "Entity"
+        }
+      },
+      "com.reddit.MessageEndpoint.removeMessage" : {
+      },
+      "com.reddit.MessageEndpoint.getAllMessages" : {
+        "response" : {
+          "$ref" : "EntityCollection"
+        }
+      },
+      "com.reddit.MessageEndpoint.listMessage" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Message"
         }
       }
     }

@@ -6,12 +6,52 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
 
       $scope.user = {};
       $scope.messages = {};
+      $scope.lastMessages = {};
+      $scope.myMessages = {};
+      $scope.myVotes = {};
 
+      var refreshList = function() {
+        listHotMessages();
+        listLastMessages();
+        listMyMessages();
+        listMyVotesMessages();
+      };
 
-      var listMessages = function() {
+      var listHotMessages = function() {
         gapi.client.messageendpoint.getAllMessages().execute(
           function(resp) {
             $scope.messages = resp.items;
+            $scope.$apply();
+            console.log(resp);
+          });
+      };
+
+      var listLastMessages = function() {
+        gapi.client.messageendpoint.getLastMessages().execute(
+          function(resp) {
+            $scope.lastMessages = resp.items;
+            $scope.$apply();
+            console.log(resp);
+          });
+      };
+
+      var listMyMessages = function() {
+        gapi.client.messageendpoint.getMyMessages({
+          userID: $scope.user.id
+        }).execute(
+          function(resp) {
+            $scope.myMessages = resp.items;
+            $scope.$apply();
+            console.log(resp);
+          });
+      };
+
+      var listMyVotesMessages = function() {
+        gapi.client.messageendpoint.getMyVotesMessages({
+          userID: $scope.user.id
+        }).execute(
+          function(resp) {
+            $scope.myVotes = resp.items;
             $scope.$apply();
             console.log(resp);
           });
@@ -27,7 +67,7 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
         }).execute(
           function(resp) {
             console.log(resp);
-            listMessages();
+            refreshList();
           });
       }
 
@@ -39,7 +79,7 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
         var rootApi = 'https://1-dot-reddit-205206.appspot.com/_ah/api/';
         gapi.client.load('messageendpoint', 'v1', function() {
           console.log("message api loaded");
-          listMessages();
+          refreshList();
         }, rootApi);
 
         gapi.load('auth2', initSigninV2);
@@ -97,7 +137,7 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
         }).execute(
           function(resp) {
             console.log(resp);
-            listMessages();
+            refreshList();
           });
       };
   }
