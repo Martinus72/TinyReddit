@@ -37,4 +37,4 @@ Nous devions aussi réalisé une série de mesure sur notre API REST:
 | :------------ | :-------------: | :------------: | :------------: |
 | Moyenne       |     911      |        933  |       991 |
 
-Ces résultats sont cohérent avec le principe du datastore de Google vu en cours. En effet, nous savons que le datastore scale donc les temps d'exécution reste semblable même avec un plus grand nombre de ressources.
+Ces résultats sont cohérents avec le principe dû datastore de Google vu en cours. En effet, nous savons que le datastore scale donc les temps d'exécution restent semblables mêmes avec un plus grand nombre de ressources.
