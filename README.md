@@ -5,6 +5,12 @@ Dans le cadre de notre module "Développement d'applications sur le CLOUD (X2IP0
 * **Alexandre Goux** - *Developer* - [alexandre-goux](https://github.com/alexandre-goux)
 * **Martin Levrard** - *Developer* - [MartinL](https://github.com/Martinus72)
 
+## Liens utiles
+
+* [Application Google App Engine](https://1-dot-reddit-205206.appspot.com/)
+* [Repot Github du projet](https://github.com/Martinus72/TinyReddit)
+* [Explorer de l'API REST](https://apis-explorer.appspot.com/apis-explorer/?base=https://1-dot-reddit-205206.appspot.com/_ah/api#p/)
+
 ## Features
 Voici la liste des fonctionnalités de notre application :
 
@@ -41,4 +47,4 @@ Nous devions aussi réalisé une série de mesure sur notre API REST:
 | :------------ | :-------------: | :------------: | :------------: |
 | Moyenne       |     911      |        933  |       991 |
 
-Ces résultats sont cohérents avec le principe dû datastore de Google vu en cours. En effet, nous savons que le datastore scale donc les temps d'exécution restent semblables mêmes avec un plus grand nombre de ressources.
+Ces résultats sont cohérents avec le principe du datastore de Google vu en cours. En effet, nous savons que le datastore scale donc les temps d'exécution restent semblables mêmes avec un plus grand nombre de ressources.
