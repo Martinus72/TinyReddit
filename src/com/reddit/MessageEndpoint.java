@@ -233,6 +233,7 @@ public class MessageEndpoint {
         
         ds.put(messageIndex);        
         return message;
+		
 	}
 	
 	

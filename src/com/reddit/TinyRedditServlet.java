@@ -2,6 +2,7 @@ package com.reddit;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -41,82 +42,38 @@ public class TinyRedditServlet extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();		
 		resp.getWriter().println("populating store...");
 		
-		int maxmessage=25;
+		int maxmessage=100;
 		int maxuser=10;
 		for (int i = 0; i < maxmessage; i++) {
 			Entity e = new Entity("rmsg", "m" + i);
 			e.setProperty("body", "Hello " + i );
 			e.setProperty("owner","u"+r.nextInt(maxuser+1));
-			//datastore.put(e);
+			datastore.put(e);
 			
 			Entity index=new Entity("rmsgIndex","i"+i,e.getKey());
 			ArrayList<String> voters = new ArrayList<String>();
-			for (int j = 0; j < 10; j++) {
-				voters.add("u"+r.nextInt(maxuser+1));
+			for (int j = 0; j < 5000; j++) {
+				int r1 = r.nextInt(maxuser+1);
+				if (r1 != 1)
+					voters.add("u"+r1);
 			}
+			voters.add("u1");
 			index.setProperty("voters", voters);
-			//datastore.put(index);
+			datastore.put(index);
 		}
 		resp.getWriter().println("populating store done !!");
 		
 		
 		// Query
-		/*String user = req.getParameter("user");
-		if (user == null) {
-			user = "u1";
-		}
+		MessageEndpoint me = new MessageEndpoint();
 		
-		resp.getWriter().println("getting index timeline for:" + user);
-
-		Filter f = new FilterPredicate("voters", FilterOperator.EQUAL, user);
-
-		Query q = new Query("rmsgIndex").setFilter(f);
-		q.setKeysOnly();
-
-		PreparedQuery pq = datastore.prepare(q);
-
-		resp.getWriter().println("<h1>query</h1>");
-		
+		resp.getWriter().println("getting index timeline for: u1");
 		long t1 = System.currentTimeMillis();
-		List<Entity> results = pq.asList(FetchOptions.Builder.withLimit(5));
-		List<Key> pk = new ArrayList<Key>();
-		for (Entity res : results) {
-			pk.add(res.getParent());
-		}
+		Collection<Entity> test = me.getMyVotesMessages("u1");
+		resp.getWriter().println("done in " + (System.currentTimeMillis() - t1));
+
+		resp.getWriter().println("Number = "+ test.size());
 		
-		Map<Key, Entity> hm = new HashMap<Key, Entity>();
-		hm = datastore.get(pk);
-
-		for (Entity ki : hm.values()) {
-			resp.getWriter().println("<li>:"+ki.getProperty("body"));
-		}
-
-		resp.getWriter().println("<li> done in " + (System.currentTimeMillis() - t1));*/
-		
-		
-		Query q = new Query("Message");
-
-		 PreparedQuery pq= datastore.prepare(q);
-		 List<Entity> results=pq.asList(FetchOptions.Builder.withLimit(5));
-		
-		 resp.getWriter().println("Message");
-		 for (Entity re : results) {
-			 resp.getWriter().println("<li>:"+re);
-			 
-			 Filter f = new FilterPredicate("Parent", FilterOperator.EQUAL, re.getKey());
-
-			com.google.appengine.api.datastore.Query qu = new com.google.appengine.api.datastore.Query("MessageIndex").setFilter(f);
-
-			PreparedQuery pq2 = datastore.prepare(qu);
-			
-			List<Entity> results2 = pq2.asList(FetchOptions.Builder.withLimit(5));
-			
-			resp.getWriter().println("MessageIndex");
-			for (Entity ki : results2) {
-				resp.getWriter().println("<li>:"+ki.getProperty("likeVoters"));
-			}
-		}
-
 		resp.getWriter().println("finished");
 		
 	}

@@ -67,6 +67,7 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
         }).execute(
           function(resp) {
             console.log(resp);
+            console.log($scope.user.id);
             refreshList();
           });
       }
@@ -114,10 +115,12 @@ var app = angular.module('tinyReddit', []).controller('Controller', ['$scope', '
               $scope.user.photo       = profile.getImageUrl();
               $scope.user.email       = profile.getEmail();
               $scope.$digest();
+              refreshList();
           } else {
               console.log('the user must not be signed in if this is printing');
               $scope.user = {};
               $scope.$digest();
+              refreshList();
           }
       };
 
